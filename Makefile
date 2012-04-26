@@ -22,6 +22,10 @@ all: tmpls
 tmpls:
 	cd kickstart; make
 
+install: tmpls
+	python setup.py build
+	python setup.py install
+
 %.py: %.tmpl
 	$(CHEETAH) compile --settings='useStackFrames=False' $<
 
