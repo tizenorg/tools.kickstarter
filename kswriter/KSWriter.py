@@ -131,9 +131,11 @@ class KSWriter():
                     else:
                         print "%s is inactive, not generating %s at this time" %(img['Name'], img['FileName'] )
         for path in self.image_meta['ExternalConfigs']:
-            for f in os.listdir(path):
+            external_config_dir = os.path.join(os.path.dirname(self.image_filename), path)
+            
+            for f in os.listdir(external_config_dir)):
                 if f.endswith('.yaml'):
-                    fp = file('%s/%s' %(path, f), 'r')
+                    fp = file('%s/%s' %(external_config_dir, f), 'r')
                     local = yaml.load(fp)
                     conf = self.parse(local)
                     if self.config:
