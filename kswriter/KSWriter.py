@@ -55,29 +55,30 @@ class KSWriter():
         conf.update(lvald)
         #print conf
         postscript = ""
+        meta_root = os.path.dirname(self.image_filename)
         for scr in conf['PostScripts']:
-            if os.path.exists('./custom/scripts/%s.post' %scr):
-                f = open('./custom/scripts/%s.post' %scr, 'r')
+            if os.path.exists('%s/custom/scripts/%s.post' %(meta_root, scr)):
+                f = open('%s/custom/scripts/%s.post' %(meta_root, scr), 'r')
                 postscript += f.read()
                 postscript += "\n"
                 f.close()
             else:
-                print './custom/scripts/%s.post not found, skipping.' %scr
+                print '%s/custom/scripts/%s.post not found, skipping.' %(meta_root,scr )
 
         nochrootscript = ""
         for scr in conf['NoChrootScripts']:
-            if os.path.exists('./custom/scripts/%s.nochroot' %scr):
-                f = open('./custom/scripts/%s.nochroot' %scr, 'r')
+            if os.path.exists('%s/custom/scripts/%s.nochroot' %(meta_root,scr)):
+                f = open('%s/custom/scripts/%s.nochroot' %(meta_root, scr ), 'r')
                 nochrootscript += f.read()
                 nochrootscript += "\n"
                 f.close()
             else:
-                print './custom/scripts/%s.nochroot not found, skipping.' %scr
+                print '%s/custom/scripts/%s.nochroot not found, skipping.' %(meta_root, scr )
 
         ptab = ""
         for g in [ plat, img ]:
             if g.has_key("Part"):
-                f = open("./custom/part/%s" %g['Part'] )
+                f = open("%s/custom/part/%s" %(meta_root, g['Part']) )
                 ptab = f.read()
                 f.close()
 
@@ -133,7 +134,7 @@ class KSWriter():
         for path in self.image_meta['ExternalConfigs']:
             external_config_dir = os.path.join(os.path.dirname(self.image_filename), path)
             
-            for f in os.listdir(external_config_dir)):
+            for f in os.listdir(external_config_dir):
                 if f.endswith('.yaml'):
                     fp = file('%s/%s' %(external_config_dir, f), 'r')
                     local = yaml.load(fp)
