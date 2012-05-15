@@ -18,6 +18,7 @@ def mkdir_p(path):
 
 class KSWriter():
     def __init__(self, configs=None, repos=None, outdir=".", config=None, packages=False):
+        self.dist = None
         self.image_filename = configs
         self.repo_filename = repos
         self.outdir = outdir
@@ -96,6 +97,8 @@ class KSWriter():
                 if repo.has_key('Options'):
                     r['Options'] = repo['Options']
                 r['Url'] = repo['Url'].replace("@ARCH@", meta['Architecture'])
+                if meta.has_key("Distribution") or self.dist is not None:
+                    r['Url'] = repo['Url'].replace("@DIST@", self.dist or meta['Distribution'])
                 r['Url'] = r['Url'].replace("@RELEASE@", meta['Baseline'])
                 new_repos.append(r)
         else:
