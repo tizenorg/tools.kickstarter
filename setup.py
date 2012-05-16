@@ -9,7 +9,7 @@ except ImportError:
     pass
 
 setup(name='kickstarter',
-      version = "0.1",
+      version = "0.2",
       description='Kickstarter',
       author='Anas Nashif',
       author_email='anas.nashif@intel.com',
