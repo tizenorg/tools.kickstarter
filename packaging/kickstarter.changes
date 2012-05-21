@@ -1,0 +1,42 @@
+* Fri May 18 2012 Jian-feng Ding <jian-feng.ding@intel.com> - 0.15
+- update to latest
+
+* Mon Jul 04 2011 Li Yi <yix.li@intel.com> - 0.12
+- make Active keyword works
+
+* Fri May 27 2011 Anas Nashif <anas.nashif@intel.com> - 0.11
+- enhance bootloader option support
+
+* Wed May 18 2011 Anas Nashif <anas.nashif@intel.com> - 0.10
+- Support bootloader options (bmc #16408)
+
+* Fri May 06 2011 Anas Nashif <anas.nashif@intel.com> - 0.9
+- Now require python-yaml
+
+* Mon May 02 2011 Anas Nashif <anas.nashif@intel.com> - 0.9
+- Fixed bmc #16397 -  temporary .yaml~ files are read 
+
+* Sat Apr 02 2011 Anas Nashif <anas.nashif@intel.com> - 0.8
+- Support external configurations
+- Support additional keywords to keep up with static ks files
+- 0.8
+
+* Fri Mar 18 2011 Anas Nashif <anas.nashif@intel.com> - 0.7
+- Fix schedule handling.
+
+* Thu Mar 17 2011 Anas Nashif <anas.nashif@intel.com> - 0.6
+- Use cron style syntax for schedule
+- Fixed path where files are stored on repo
+
+* Wed Mar 16 2011 Anas Nashif <anas.nashif@intel.com> - 0.5
+- Add python-lxml as a runtime dependency
+
+* Wed Mar 16 2011 Anas Nashif <anas.nashif@intel.com> - 0.5
+- Create index file with all kickstart files
+
+* Sun Feb 06 2011 Anas Nashif <anas.nashif@intel.com> - 0.4
+- Make it build on other distros
+
+* Wed Jan 26 2011 Anas Nashif <anas.nashif@intel.com> - 0.2
+- Initial Release
+
