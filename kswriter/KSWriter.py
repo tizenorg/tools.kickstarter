@@ -19,6 +19,7 @@ def mkdir_p(path):
 class KSWriter():
     def __init__(self, configs=None, repos=None, outdir=".", config=None, packages=False):
         self.dist = None
+        self.arch = None
         self.image_filename = configs
         self.repo_filename = repos
         self.outdir = outdir
@@ -89,18 +90,22 @@ class KSWriter():
         return conf
 
     def process_files(self,  meta,  repos):
+        print "arch: %s, dist: %s" %(self.arch, self.dist)
         new_repos = []
         if meta.has_key("Architecture") and  meta['Architecture']:
             for repo in repos:
                 r = {}
                 r['Name'] = repo['Name']
+                repourl = repo['Url']
                 if repo.has_key('Options'):
                     r['Options'] = repo['Options']
-                r['Url'] = repo['Url'].replace("@ARCH@", meta['Architecture'])
-                if meta.has_key("Distribution") or self.dist is not None:
-                    r['Url'] = repo['Url'].replace("@DIST@", self.dist or meta['Distribution'])
-                r['Url'] = r['Url'].replace("@RELEASE@", meta['Baseline'])
+                if meta.has_key("Architecture") or self.arch:
+                    repourl = repourl.replace("@ARCH@", self.arch or meta['Architecture'])
+                if meta.has_key("Distribution") or self.dist:
+                    repourl = repourl.replace("@DIST@", self.dist or meta['Distribution'])
+                r['Url'] = repourl.replace("@RELEASE@", meta['Baseline'])
                 new_repos.append(r)
+
         else:
             new_repos = repos
 
@@ -110,7 +115,7 @@ class KSWriter():
         if meta.has_key('FileName') and meta['FileName']:
             f = None
             if meta.has_key("Baseline"):
-                mkdir_p(meta['Baseline'])
+                mkdir_p("%s/%s" %(self.outdir, meta['Baseline']))
                 f = open("%s/%s/%s.ks" %( self.outdir, meta['Baseline'],  meta['FileName'] ), 'w')
             else:
                 f = open("%s/%s.ks" %( self.outdir, meta['FileName'] ), 'w')
@@ -145,6 +150,7 @@ class KSWriter():
                     if self.config:
                         if self.config == conf['FileName']:
                             if self.packages:
+                                out['baseline'] = conf['Baseline']
                                 out['groups'] = conf['Groups']
                                 out['packages'] = conf['ExtraPackages']
                             else:
