@@ -19,7 +19,7 @@ def mkdir_p(path):
 class KSWriter():
     def __init__(self, configs=None, repos=None, outdir=".", config=None, packages=False):
         self.dist = None
-        self.image_filename = configs
+        self.image_filename = os.path.abspath(os.path.expanduser(configs))
         self.repo_filename = repos
         self.outdir = outdir
         self.packages = packages
