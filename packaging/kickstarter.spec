@@ -8,6 +8,7 @@ License:    GPLv2
 BuildArch:  noarch
 URL:        http://www.meego.com
 Source0:    %{name}-%{version}.tar.bz2
+Source1001: packaging/kickstarter.manifest 
 Requires:   python-yaml
 #Requires:   python-urlgrabber
 Requires:   python-cheetah
@@ -26,6 +27,7 @@ Create Configuration files to build meego images
 
 
 %build
+cp %{SOURCE1001} .
 make tmpls
 
 CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
@@ -45,6 +47,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
+%manifest kickstarter.manifest
 %defattr(-,root,root,-)
 %{_bindir}/*
 %{python_sitelib}/*
