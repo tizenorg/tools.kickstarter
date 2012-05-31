@@ -53,9 +53,7 @@ class KSWriter():
             if img.has_key(l) and img[l]:
                 full = full + img[l]
             lvald[l] = sorted(set(full), key=full.index)
-            #print full
         conf.update(lvald)
-        #print conf
         postscript = ""
         meta_root = os.path.dirname(self.image_filename)
         for scr in conf['PostScripts']:
@@ -90,7 +88,6 @@ class KSWriter():
         return conf
 
     def process_files(self,  meta,  repos):
-        print "arch: %s, dist: %s" %(self.arch, self.dist)
         new_repos = []
         if meta.has_key("Architecture") and  meta['Architecture']:
             for repo in repos:
