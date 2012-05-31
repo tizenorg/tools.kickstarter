@@ -50,3 +50,4 @@ clean:
 	rm -f $(addsuffix .bak,$(TEMPLATE_MODS))
 	rm -f *.pyc *.pyo
 	rm -rf dist/ build/ kickstart/kickstart.py kickstart/__init__.py *~ */*~
+	rm -rf *.egg-info/

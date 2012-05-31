@@ -1,0 +1,17 @@
+Name: MeeGo Netbook/Nettop
+PartSize: 2580
+Active: True
+Baseline: "1.1.80"
+Platform: NETBOOK
+Desktop: meego
+FileName: netbook-ia32
+Mic2Options: -f livecd
+Groups:
+    - MeeGo Netbook Desktop
+    - Base Double Byte IME Support
+    - MeeGo Base Development
+Repos:
+    - core
+    - netbook
+ExtraPackages:
+    - chromium

@@ -20,7 +20,7 @@ class KSWriter():
     def __init__(self, configs=None, repos=None, outdir=".", config=None, packages=False):
         self.dist = None
         self.arch = None
-        self.image_filename = configs
+        self.image_filename = os.path.abspath(os.path.expanduser(configs))
         self.repo_filename = repos
         self.outdir = outdir
         self.packages = packages
@@ -141,7 +141,7 @@ class KSWriter():
                         print "%s is inactive, not generating %s at this time" %(img['Name'], img['FileName'] )
         for path in self.image_meta['ExternalConfigs']:
             external_config_dir = os.path.join(os.path.dirname(self.image_filename), path)
-            
+
             for f in os.listdir(external_config_dir):
                 if f.endswith('.yaml'):
                     fp = file('%s/%s' %(external_config_dir, f), 'r')

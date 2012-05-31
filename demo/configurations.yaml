@@ -1,7 +1,9 @@
 ExternalConfigs: 
-    - ex
+    - netbook
+
 Default:
     Active: True
+    Baseline: tizen-0.99
     Language: en_US.UTF-8
     Keyboard: us
     PackageArgs:
@@ -116,7 +118,6 @@ NETBOOK:
 Configurations:
     -   Name: MeeGo IVI Development
         Active: True
-        Baseline: "1.1.80"
         Platform: IVI
         Desktop: X-IVI
         FileName: ivi-ia32
@@ -133,7 +134,6 @@ Configurations:
             - mesa-libEGL
     -   Name: MeeGo IVI
         Active: True
-        Baseline: "1.1.80"
         Platform: IVI
         Desktop: X-IVI
         FileName: ivi-ia32
@@ -147,27 +147,9 @@ Configurations:
             - ivi
         ExtraPackages:
             - mesa-libEGL
-    -   Name: MeeGo Netbook/Nettop
-        PartSize: 3000
-        Active: True
-        Baseline: "1.1.80"
-        Platform: NETBOOK
-        Desktop: meego
-        FileName: netbook-ia32
-        Mic2Options: -f livecd
-        Groups:
-            - MeeGo Netbook Desktop
-            - Base Double Byte IME Support
-            - MeeGo Base Development
-        Repos:
-            - core
-            - netbook
-        ExtraPackages:
-            - chromium
     -   Name: MeeGo Handset N900 Development
         Part: n900-devel
         Active: True
-        Baseline: "1.1.80"
         Platform: N900
         FileName: handset-armv7l-n900-devel
         Mic2Options: -f raw --save-kernel --arch=armv7l
@@ -187,7 +169,6 @@ Configurations:
             - u-boot
     -   Name: MeeGo Handset N900
         Active: True
-        Baseline: "1.1.80"
         Platform: N900
         FileName: handset-armv7l-n900
         Mic2Options: -f raw --save-kernel --arch=armv7l
@@ -208,7 +189,6 @@ Configurations:
     -   Name: MeeGo Handset MTF Development
         PartSize: 2200
         Active: True
-        Baseline: "1.1.80"
         Platform: MFLD
         FileName: handset-ia32-mtf-devel
         Mic2Options: -f nand
@@ -225,7 +205,6 @@ Configurations:
             - serial-mfld
     -   Name: MeeGo Handset MTF Pinetrail
         Active: True
-        Baseline: "1.1.80"
         Platform: MFLD
         FileName: handset-ia32-pinetrail-mtf
         Mic2Options: -f livecd
@@ -236,7 +215,6 @@ Configurations:
     -   Name: MeeGo Handset MTF
         Schedule: "* * * * 3"
         Active: True
-        Baseline: "1.1.80"
         Platform: MFLD
         FileName: handset-ia32-mtf
         Mic2Options: -f nand
@@ -252,3 +230,6 @@ Configurations:
             - serial-mfld
         PrePackages:
             - Answer2theUltimateQuestionOfEverything
+        Attachment:
+            - ifwi
+            - /boot/vmlinuz-*
