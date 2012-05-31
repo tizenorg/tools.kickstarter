@@ -230,3 +230,6 @@ Configurations:
             - serial-mfld
         PrePackages:
             - Answer2theUltimateQuestionOfEverything
+        Attachment:
+            - ifwi
+            - /boot/vmlinuz-*
