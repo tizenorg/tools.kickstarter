@@ -99,6 +99,14 @@ ${e}
 %end
 #end if
 
+#if $metadata.has_key("Attachment")
+%attachment
+#for $e in $metadata.Attachment
+${e}
+#end for
+%end
+#end if
+
 %post
 ${metadata.Post}
 %end
