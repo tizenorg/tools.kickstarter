@@ -53,9 +53,7 @@ class KSWriter():
             if img.has_key(l) and img[l]:
                 full = full + img[l]
             lvald[l] = sorted(set(full), key=full.index)
-            #print full
         conf.update(lvald)
-        #print conf
         postscript = ""
         meta_root = os.path.dirname(self.image_filename)
         for scr in conf['PostScripts']:
@@ -90,7 +88,6 @@ class KSWriter():
         return conf
 
     def process_files(self,  meta,  repos):
-        print "arch: %s, dist: %s" %(self.arch, self.dist)
         new_repos = []
         if meta.has_key("Architecture") and  meta['Architecture']:
             for repo in repos:
@@ -124,24 +121,23 @@ class KSWriter():
 
     def generate(self):
         out = {}
-        r = self.repo_meta['Repositories']
+        repos = self.repo_meta['Repositories']
         if self.image_meta.has_key('Configurations'):
             for img in self.image_meta['Configurations']:
                 conf = self.parse(img)
                 if self.config:
                     if img.has_key('FileName') and self.config == img['FileName']:
                         print "Creating %s (%s.ks)" %(img['Name'], img['FileName'] )
-                        self.process_files(conf, r)
+                        self.process_files(conf, repos)
                         break
                 else:
                     if conf.has_key('Active') and conf['Active'] :
                         print "Creating %s (%s.ks)" %(img['Name'], img['FileName'] )
-                        self.process_files(conf, r)
+                        self.process_files(conf, repos)
                     else:
                         print "%s is inactive, not generating %s at this time" %(img['Name'], img['FileName'] )
         for path in self.image_meta['ExternalConfigs']:
             external_config_dir = os.path.join(os.path.dirname(self.image_filename), path)
-            
             for f in os.listdir(external_config_dir):
                 if f.endswith('.yaml'):
                     fp = file('%s/%s' %(external_config_dir, f), 'r')
@@ -155,7 +151,7 @@ class KSWriter():
                                 out['packages'] = conf['ExtraPackages']
                             else:
                                 print "Creating %s (%s.ks)" %(conf['Name'], conf['FileName'] )
-                                self.process_files(conf, r)
+                                self.process_files(conf, repos)
                                 break
                     else:
                         if conf.has_key('Active') and conf['Active']:
