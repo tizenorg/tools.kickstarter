@@ -5,6 +5,7 @@ import yaml
 import os, re
 import sys
 import errno
+from urlparse import urlparse
 
 from kickstart import kickstart
 
@@ -89,7 +90,7 @@ class KSWriter():
 
     def process_files(self,  meta,  repos):
         new_repos = []
-        if meta.has_key("Architecture") and  meta['Architecture']:
+        if ( meta.has_key("Architecture") and  meta['Architecture'] )  or ( meta.has_key("Distribution") and  meta['Distribution']):
             for repo in repos:
                 r = {}
                 r['Name'] = repo['Name']
@@ -100,9 +101,16 @@ class KSWriter():
                     repourl = repourl.replace("@ARCH@", self.arch or meta['Architecture'])
                 if meta.has_key("Distribution") or self.dist:
                     repourl = repourl.replace("@DIST@", self.dist or meta['Distribution'])
-                r['Url'] = repourl.replace("@RELEASE@", meta['Baseline'])
-                new_repos.append(r)
 
+                url = repourl.replace("@RELEASE@", meta['Baseline'])
+                o = urlparse(url)
+                new_url = "%s://" % o[0]
+                if repo.has_key('Username') and repo['Username']:
+                    new_url = "%s%s" % (new_url, repo['Username'] )
+                if repo.has_key('Password') and repo['Password']:
+                    new_url = "%s:%s@" % (new_url, repo['Password'] )
+                r['Url'] = "%s%s%s" % (new_url, o[1], o[2] )
+                new_repos.append(r)
         else:
             new_repos = repos
 
