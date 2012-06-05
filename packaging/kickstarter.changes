@@ -1,4 +1,7 @@
 * Tue Jun 05 2012 Jian-feng Ding <jian-feng.ding@intel.com> - 0.15
+- trigger a submission to OBS
+
+* Tue Jun 05 2012 Jian-feng Ding <jian-feng.ding@intel.com> - 0.15
 - added patch for new section support
 
 * Fri May 18 2012 Jian-feng Ding <jian-feng.ding@intel.com> - 0.15
