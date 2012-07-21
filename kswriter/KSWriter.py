@@ -5,6 +5,7 @@ import yaml
 import os, re
 import sys
 import errno
+from urlparse import urlparse
 
 from kickstart import kickstart
 
@@ -89,7 +90,7 @@ class KSWriter():
 
     def process_files(self,  meta,  repos):
         new_repos = []
-        if meta.has_key("Architecture") and  meta['Architecture']:
+        if ( meta.has_key("Architecture") and  meta['Architecture'] )  or ( meta.has_key("Distribution") and  meta['Distribution']):
             for repo in repos:
                 r = {}
                 r['Name'] = repo['Name']
@@ -100,9 +101,16 @@ class KSWriter():
                     repourl = repourl.replace("@ARCH@", self.arch or meta['Architecture'])
                 if meta.has_key("Distribution") or self.dist:
                     repourl = repourl.replace("@DIST@", self.dist or meta['Distribution'])
-                r['Url'] = repourl.replace("@RELEASE@", meta['Baseline'])
-                new_repos.append(r)
 
+                url = repourl.replace("@RELEASE@", meta['Baseline'])
+                o = urlparse(url)
+                new_url = "%s://" % o[0]
+                if repo.has_key('Username') and repo['Username']:
+                    new_url = "%s%s" % (new_url, repo['Username'] )
+                if repo.has_key('Password') and repo['Password']:
+                    new_url = "%s:%s@" % (new_url, repo['Password'] )
+                r['Url'] = "%s%s%s" % (new_url, o[1], o[2] )
+                new_repos.append(r)
         else:
             new_repos = repos
 
@@ -121,24 +129,23 @@ class KSWriter():
 
     def generate(self):
         out = {}
-        r = self.repo_meta['Repositories']
+        repos = self.repo_meta['Repositories']
         if self.image_meta.has_key('Configurations'):
             for img in self.image_meta['Configurations']:
                 conf = self.parse(img)
                 if self.config:
                     if img.has_key('FileName') and self.config == img['FileName']:
                         print "Creating %s (%s.ks)" %(img['Name'], img['FileName'] )
-                        self.process_files(conf, r)
+                        self.process_files(conf, repos)
                         break
                 else:
                     if conf.has_key('Active') and conf['Active'] :
                         print "Creating %s (%s.ks)" %(img['Name'], img['FileName'] )
-                        self.process_files(conf, r)
+                        self.process_files(conf, repos)
                     else:
                         print "%s is inactive, not generating %s at this time" %(img['Name'], img['FileName'] )
         for path in self.image_meta['ExternalConfigs']:
             external_config_dir = os.path.join(os.path.dirname(self.image_filename), path)
-
             for f in os.listdir(external_config_dir):
                 if f.endswith('.yaml'):
                     fp = file('%s/%s' %(external_config_dir, f), 'r')
@@ -152,7 +159,7 @@ class KSWriter():
                                 out['packages'] = conf['ExtraPackages']
                             else:
                                 print "Creating %s (%s.ks)" %(conf['Name'], conf['FileName'] )
-                                self.process_files(conf, r)
+                                self.process_files(conf, repos)
                                 break
                     else:
                         if conf.has_key('Active') and conf['Active']:
