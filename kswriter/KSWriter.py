@@ -164,7 +164,7 @@ class KSWriter():
                     else:
                         if conf.has_key('Active') and conf['Active']:
                             print "Creating %s (%s.ks)" %(conf['Name'], conf['FileName'] )
-                            self.process_files(conf, r)
+                            self.process_files(conf, repos)
                         else:
                             print "%s is inactive, not generate %s this time" %(conf['Name'], conf['FileName'] )
                 else:
