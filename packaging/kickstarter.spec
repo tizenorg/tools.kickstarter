@@ -1,4 +1,4 @@
-Summary:	Create kickstart files for meego images
+Summary:	Create kickstart files for image creation
 Name:		kickstarter
 Version:	0.15
 Release:	1
@@ -15,7 +15,7 @@ BuildRequires:  python-devel
 BuildRequires:  python-cheetah
 
 %description
-Create Configuration files to build meego images
+Create Configuration files(kickstart) to build images
 
 %prep
 %setup -q
@@ -30,5 +30,5 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc GPL 
+%doc GPL
 
