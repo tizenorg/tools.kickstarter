@@ -1,0 +1,106 @@
+#!/usr/bin/python
+# Anas Nashif <anas.nashif@intel.com>
+import yaml,  sys
+import re, os
+from kswriter import KSWriter
+
+import copy
+import time
+import optparse
+from time import gmtime, strftime
+try:
+  from lxml import etree
+except ImportError:
+  try:
+    # Python 2.5
+    import xml.etree.cElementTree as etree
+  except ImportError:
+    try:
+      # Python 2.5
+      import xml.etree.ElementTree as etree
+    except ImportError:
+      try:
+        # normal cElementTree install
+        import cElementTree as etree
+      except ImportError:
+        try:
+          # normal ElementTree install
+          import elementtree.ElementTree as etree
+        except ImportError:
+          print("Failed to import ElementTree from any known place")
+
+
+def image_xml(root, img):
+    s = etree.Element("config")
+    c = etree.Element('name')
+    c.text = "%s.ks" %img['FileName']
+    s.append(c)
+    cc = etree.Element('path')
+    cc.text = "image-configs/%s.ks" %img['FileName']
+    s.append(cc)
+    cc = etree.Element('description')
+    cc.text = "%s" %img['Name']
+    s.append(cc)
+
+    if img.has_key('Architecture'):
+        cc = etree.Element('arch')
+        cc.text = "%s" %img['Architecture']
+        s.append(cc)
+
+    cc = etree.Element('md5')
+    cc.text = ""
+    s.append(cc)
+
+    cc = etree.Element('schedule')
+    if img.has_key('Schedule'):
+        cc.text = img['Schedule']
+    s.append(cc)
+    root.append(s)
+
+def create_xml(image_meta):
+    root = etree.Element("image-configs")
+    if image_meta.has_key('Configurations'):
+        for img in image_meta['Configurations']:
+            image_xml(root,img)
+    for path in image_meta['ExternalConfigs']:
+        for f in os.listdir(path):
+            if f.endswith('.yaml'):
+                fp = file('%s/%s' %(path, f), 'r')
+                local = yaml.load(fp)
+                conf = ks.parse(local)
+                if conf.has_key('Active') and conf['Active']:
+                    image_xml(root,conf)
+
+    str = etree.tostring(root, pretty_print=True)
+    return str
+
+if __name__ == '__main__':
+    parser = optparse.OptionParser()
+
+    parser.add_option("-c", "--configs", type="string", dest="configsfile",
+                    help="configuration meta file")
+    parser.add_option("-o", "--outdir", type="string", dest="outdir", default=".",
+                    help="outdir")
+    parser.add_option("-r", "--repos", type="string", dest="repofile",
+                    help="repo meta file")
+    parser.add_option("-i", "--index", type="string", dest="indexfile",
+                    help="generate index file")
+    parser.add_option("-C", "--config", type="string", dest="config", default=None,
+                    help="Limit to this configuration file")
+    parser.add_option("-p", "--packages", action="store_true", dest="packages", default=False,
+                    help="return list of packages to be installed for this configuration")
+
+    (options, args) = parser.parse_args()
+
+    if options.configsfile is None or options.repofile is None:
+        print "you need to provide meta files with --configs and --repos"
+        sys.exit(1)
+
+    ks = KSWriter(options.configsfile, options.repofile, options.outdir, options.config, options.packages)
+    ks.generate()
+
+    if options.indexfile:
+        str = create_xml(ks.image_meta)
+        f = open(options.indexfile, 'w')
+        f.write(str)
+        f.close()
