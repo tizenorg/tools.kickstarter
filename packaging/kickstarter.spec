@@ -33,6 +33,8 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
+mkdir -p %{buildroot}/usr/share/license
+cp LICENSE %{buildroot}/usr/share/license/%{name}
 %if 0%{?suse_version}
 %{__python} setup.py install --root=$RPM_BUILD_ROOT --prefix=%{_prefix}
 %else
@@ -45,3 +47,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_bindir}/*
 %{python_sitelib}/*
+/usr/share/license/%{name}
