@@ -1,0 +1,235 @@
+ExternalConfigs: 
+    - netbook
+
+Default:
+    Active: True
+    Baseline: tizen-0.99
+    Language: en_US.UTF-8
+    Keyboard: us
+    PackageArgs:
+    SaveRepos:  True
+    Timezone: America/Los_Angeles
+    RootPass: meego
+    DefaultUser: meego
+    DefaultUserPass: meego
+    PartSize: 1900
+    FileSystem: ext3
+    PostScripts:
+        - rpm
+    Groups:
+        - MeeGo Core
+        - MeeGo Compliance
+
+CORE:
+    PartSize: 1000
+    BootloaderAppend: "quiet"
+    BootloaderTimeout: 0
+    PostScripts:
+        - cleanup
+    Groups:
+        - MeeGo X Window System
+    NoChrootScripts:
+        - buildname
+N900:
+    Part: n900
+    BootloaderTimeout: 
+    BootloaderAppend: 
+    StartX: True
+    Groups:
+        - MeeGo Core
+        - Minimal MeeGo X Window System
+        - X for Handsets 
+        - MeeGo Compliance
+        - MeeGo Handset Desktop
+        - MeeGo Handset Applications
+        - MeeGo Base Development
+    Kernel: kernel-adaptation-n900
+    PostScripts:
+        - cleanup
+    NoChrootScripts:
+        - buildname
+    Architecture: armv7l
+    Repos:
+        - core
+        - handset
+        - non-oss
+MFLD:
+    PartSize: 1700
+    BootloaderAppend: "ro pci=noearly console=tty1 console=ttyS0 console=ttyMFD2 earlyprintk=mrst loglevel=8 s0ix_latency=160"
+    BootloaderTimeout: 2
+    Bootloader: True
+    StartX: True
+    Groups:
+        - MeeGo Core
+        - Minimal MeeGo X Window System
+        - X for Handsets 
+        - MeeGo Compliance
+        - MeeGo Handset Desktop
+        - MeeGo Handset Applications
+        - MeeGo Base Development
+    Kernel: kernel
+    PostScripts:
+        - prelink
+        - cleanup
+    NoChrootScripts:
+        - buildname
+    Architecture: ia32
+    Repos:
+        - core
+        - handset
+        - non-oss
+IVI:
+    PartSize: 2200
+    Bootloader: True
+    BootloaderAppend: "quiet"
+    BootloaderTimeout: 0
+    BootloaderOptions: --test
+    Session: "/usr/bin/startivi"
+    StartX: True
+    Groups:
+        - X for IVI
+    Kernel: kernel-adaptation-intel-automotive
+    PostScripts:
+        - prelink
+        - cleanup
+    NoChrootScripts:
+        - buildname
+    Architecture: ia32
+NETBOOK:
+    PartSize: 3000
+    Bootloader: True
+    BootloaderAppend: "quiet"
+    BootloaderTimeout: 0
+    StartX: True
+    Groups:
+        - X for Netbooks
+        - Virtual Machine Support
+        - Printing
+        - Games
+        - MeeGo Netbook Desktop
+    Kernel: kernel
+    PostScripts:
+        - prelink
+        - cleanup
+    NoChrootScripts:
+        - buildname
+    Architecture: ia32
+    
+Configurations:
+    -   Name: MeeGo IVI Development
+        Active: True
+        Platform: IVI
+        Desktop: X-IVI
+        FileName: ivi-ia32
+        Mic2Options: -f livecd
+        Groups:
+            - MeeGo IVI Desktop
+            - MeeGo Base Development
+            - MeeGo IVI Applications
+            - Development Tools
+        Repos:
+            - core
+            - ivi
+        ExtraPackages:
+            - mesa-libEGL
+    -   Name: MeeGo IVI
+        Active: True
+        Platform: IVI
+        Desktop: X-IVI
+        FileName: ivi-ia32
+        Mic2Options: -f livecd
+        Groups:
+            - MeeGo IVI Desktop
+            - MeeGo Base Development
+            - MeeGo IVI Applications
+        Repos:
+            - core
+            - ivi
+        ExtraPackages:
+            - mesa-libEGL
+    -   Name: MeeGo Handset N900 Development
+        Part: n900-devel
+        Active: True
+        Platform: N900
+        FileName: handset-armv7l-n900-devel
+        Mic2Options: -f raw --save-kernel --arch=armv7l
+        Architecture: armv7l
+        Desktop: DUI
+        Session: "/usr/bin/mcompositor"
+        Groups:
+            - Nokia N900 Support
+            - Nokia N900 Proprietary Support
+            - Development Tools
+        ExtraPackages:
+            - xorg-x11-utils-xev
+            - u-boot-tools
+        PostScripts:
+            - inittab-n900
+            - fstab-n900
+            - u-boot
+    -   Name: MeeGo Handset N900
+        Active: True
+        Platform: N900
+        FileName: handset-armv7l-n900
+        Mic2Options: -f raw --save-kernel --arch=armv7l
+        Architecture: armv7l
+        Desktop: DUI
+        Session: "/usr/bin/mcompositor"
+        Groups:
+            - Nokia N900 Support
+            - Nokia N900 Proprietary Support
+        ExtraPackages:
+            - xorg-x11-utils-xev
+            - u-boot-tools
+        PostScripts:
+            - inittab-n900
+            - fstab-n900
+            - u-boot
+
+    -   Name: MeeGo Handset MTF Development
+        PartSize: 2200
+        Active: True
+        Platform: MFLD
+        FileName: handset-ia32-mtf-devel
+        Mic2Options: -f nand
+        Kernel: kernel-adaptation-medfield
+        Architecture: ia32
+        Desktop: DUI
+        Session: "/usr/bin/mcompositor"
+        Groups:
+            - Moorestown Support
+            - Development Tools
+        PostScripts:
+            - kernel-handset
+            - kboot
+            - serial-mfld
+    -   Name: MeeGo Handset MTF Pinetrail
+        Active: True
+        Platform: MFLD
+        FileName: handset-ia32-pinetrail-mtf
+        Mic2Options: -f livecd
+        Kernel: kernel
+        Architecture: ia32
+        Desktop: DUI
+        Session: "/usr/bin/mcompositor"
+    -   Name: MeeGo Handset MTF
+        Schedule: "* * * * 3"
+        Active: True
+        Platform: MFLD
+        FileName: handset-ia32-mtf
+        Mic2Options: -f nand
+        Kernel: kernel-adaptation-medfield
+        Architecture: ia32
+        Desktop: DUI
+        Session: "/usr/bin/mcompositor"
+        Groups:
+            - Moorestown Support
+        PostScripts:
+            - kernel-handset
+            - kboot
+            - serial-mfld
+        PrePackages:
+            - Answer2theUltimateQuestionOfEverything
+        Attachment:
+            - ifwi
+            - /boot/vmlinuz-*
