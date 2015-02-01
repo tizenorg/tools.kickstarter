@@ -22,10 +22,6 @@ all: tmpls
 tmpls:
 	cd kickstart; make
 
-install: tmpls
-	python setup.py build
-	python setup.py install
-
 %.py: %.tmpl
 	$(CHEETAH) compile --settings='useStackFrames=False' $<
 
@@ -50,4 +46,3 @@ clean:
 	rm -f $(addsuffix .bak,$(TEMPLATE_MODS))
 	rm -f *.pyc *.pyo
 	rm -rf dist/ build/ kickstart/kickstart.py kickstart/__init__.py *~ */*~
-	rm -rf *.egg-info/
